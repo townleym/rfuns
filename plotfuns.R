@@ -570,6 +570,9 @@ greygrid2 = function(x = NA, y = NA, xrange = c(0, 360), yrange = c(30, 60), xby
 	# bg.col = "gray98"
 	
 	if(length(x) > 1 & length(y) > 1) {
+		x = x[!is.na(x)]
+		y = y[!is.na(y)]
+
 		xrange = c(min(x), max(x))
 		yrange = c(min(y), max(y))
 	}
@@ -729,6 +732,54 @@ quickscatter = function(predictor, outcome, line = c("lowess", "straight"), labs
 
 ###############################################################################
 # 
+# Quickscatter2
+#
+# An X-Y scatter with something other than the default colors
+# Different from above in that it draws both lowess and abline (with beta)
+#
+# 
+###############################################################################
+
+quickscatter2 = function(predictor, outcome, xlabel = NA, ylabel = NA, f = 2/3, labs = F) {
+
+	xlabel = deparse(substitute(predictor))
+	ylabel = deparse(substitute(outcome))
+
+	pointcol = "#F1A340"
+	linecol = "#998EC3"
+	
+	predictor = predictor[!is.na(predictor)]
+	outcome = outcome[!is.na(outcome)]
+	
+	greygrid2(predictor, outcome)
+	
+	# Variable names as axis labels if not otherwise specified
+	xl = ifelse(is.na(xlabel), quote(predictor), xlabel)
+	yl = ifelse(is.na(ylabel), quote(outcome), ylabel)
+	title(xlab = xl, ylab = yl)
+	
+	points(outcome ~ predictor, col = pointcol, xlab = xlabel, ylab = ylabel, bty = "n")
+	# lowess
+	points(lowess(x = predictor, y = outcome, f = f), type = "l", lwd = 2, col = linecol)	
+	
+	# straight
+	ln = lm(outcome ~ predictor)
+	beta = signif(coef(ln)[[2]], 3)
+	abline(ln, col = "grey50", lwd = 1.5)
+
+	legend("topleft", legend = bquote(beta == .(beta)), bty = "n", cex = 0.85)
+
+	# throw the variable name right into the middle of the plot
+	if (labs) {
+		par(usr = c(0, 1, 0, 1))
+		text(x = 0.5, y = 0.5, xlabel, col = "gray40")		
+	}
+
+}
+## End quickscatter2
+
+###############################################################################
+# 
 # Quickpair
 #
 # An extension of quickscatter that will plot multiple colors and multiple 
@@ -802,4 +853,33 @@ quickpair = function(predictor, outcome, strat, line = c("lowess", "straight"), 
 		text(x = 0.5, y = 0.5, xlabel, col = "gray40")		
 	}
 
+}
+
+### Very quick function to calculate RMSE and pseudo RSquared
+### from a glm object
+rmse.glm = function(m) {
+	# m = quote(m.glm)
+	
+	n = nrow(m$model)
+	k = ncol(m$model) - 1
+	Y = m$model[,1]
+	
+	fitted = m$fitted.values
+	epsilonhat = Y - fitted
+	sigma2hat = sum(epsilonhat^2) / (n-k)
+	rmse = sqrt(sigma2hat)
+	rsq = cor(Y, fitted)^2
+	cbind(rmse, rsq)
+}
+
+### Another quick little function to plot fitted as a function of actuals
+plot.avp = function(m) {
+	x = m$model[,1]
+	y = m$fitted.values
+	
+	greygrid2(x, y)
+	points(y ~ x, type = "p", lty = 2, lwd = 1, col = analytics[1])
+	title(xlab = "Actual", ylab = "Fitted")
+	# abline(lm(y~x), col = analytics[1])
+	abline(a = 0, b = 1, lty = 2, col = "grey60")
 }
