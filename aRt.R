@@ -87,7 +87,7 @@ pal(turret)
 #########################################################################
 # Watch it
 for (i in 1:20) {
-	random.bubbles(bubbles = 3, minsize = 20, maxsize = 50, pal = turret)
+	random.bubbles(bubbles = 3, minsize = 20, maxsize = 50, pal = pal.turret)
 	Sys.sleep(0.5)	
 }
 
@@ -182,8 +182,8 @@ offset.bubbles = function(bubbles = 3, minsize = 10, maxsize = 50, alpha = 100, 
 }
 
 for (i in 1:20) {
-	offset.bubbles(bubbles = 3, minsize = 80, maxsize = 150, alpha = 200, a.noise = 10, randomstart = T, pal = turret)
-	Sys.sleep(0.5)	
+	offset.bubbles(bubbles = 10, minsize = 10, maxsize = 30, alpha = 200, a.noise = 10, randomstart = F, pal = pal.flatshare)
+	Sys.sleep(0.25)	
 }
 
 ## Offset boxes
@@ -242,11 +242,15 @@ offset.boxes = function(bubbles = 3, minsize = 10, maxsize = 50, alpha = 100, a.
 }
 ## End offset boxes
 
-for (i in 1:20) {
-	offset.boxes(bubbles = 17, minsize = 5, maxsize = 30, alpha = 200, a.noise = 10, randomstart = T, pal = turret)
+for (i in 1:10) {
+	offset.boxes(bubbles = 17, minsize = 5, maxsize = 30, alpha = 200, a.noise = 10, randomstart = F, pal = pal.vin)
 	Sys.sleep(0.5)	
 }
 
+for (i in 1:10) {
+	offset.bubbles(bubbles = 17, minsize = 5, maxsize = 30, alpha = 200, a.noise = 10, randomstart = T, pal = turret.ramp(10))
+	Sys.sleep(0.5)	
+}
 
 setwd('~/Documents/aRt')
 
