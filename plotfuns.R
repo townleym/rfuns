@@ -557,7 +557,7 @@ dotchart.ann = function(vals = NULL,
 # 
 ###############################################################################
 
-greygrid2 = function(x = NA, y = NA, xrange = c(0, 360), yrange = c(30, 60), xby = 30, yby = 5, vline = T, hline = T, bg.col = "gray98", cex = 0.85) {
+greygrid2 = function(x = NA, y = NA, xaxt = T, yaxt = T, xrange = c(0, 360), yrange = c(30, 60), xby = 30, yby = 5, vline = T, hline = T, bg.col = "gray98", cex = 0.85) {
 	
 	# # uncomment to debug
 	# x = NA
@@ -668,6 +668,7 @@ greygrid2 = function(x = NA, y = NA, xrange = c(0, 360), yrange = c(30, 60), xby
 	# abline(h = yats, lwd = hline, col = grid.col)
 
 	# finally, plot axes
+	if(xaxt) {
 	axis(side = 1, at = xats, 
 		 col.ticks = box.col, 
 		 col = ax.col, 
@@ -676,8 +677,10 @@ greygrid2 = function(x = NA, y = NA, xrange = c(0, 360), yrange = c(30, 60), xby
 		 lwd = 0, 
 		 lwd.ticks = tick.wd,
 		 cex.axis = cex,
-		 las = 1)
-		 
+		 las = 1)		
+	}
+	
+	if(yaxt) {
 	axis(side = 2, at = yats, 
 		 col.ticks = box.col, 
 		 col = ax.col, 
@@ -686,7 +689,8 @@ greygrid2 = function(x = NA, y = NA, xrange = c(0, 360), yrange = c(30, 60), xby
 		 lwd = 0, 
 		 lwd.ticks = tick.wd,
 		 cex.axis = cex,
-		 las = 1)
+		 las = 1)		
+	}	 
 	
 } # end greygrid2()
 
