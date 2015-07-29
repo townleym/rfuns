@@ -573,12 +573,12 @@ greygrid2 = function(x = NA, y = NA, xaxt = T, yaxt = T, xrange = c(0, 360), yra
 		x = x[!is.na(x)]
 		y = y[!is.na(y)]
 
-		xrange = range(x)
-		yrange = range(y)
+		# xrange = range(x)
+		# yrange = range(y)
 
 		# Restrict to finite values for plot axis limits
-		xrange.lim = range(x, finite = T)
-		yrange.lim = range(y, finite = T)
+		xrange = range(x, finite = T)
+		yrange = range(y, finite = T)
 	}
 	
 		
@@ -633,7 +633,7 @@ greygrid2 = function(x = NA, y = NA, xaxt = T, yaxt = T, xrange = c(0, 360), yra
 
 	# initialize & draw
 	plot.new()
-	plot.window(xlim = xrange.lim + c(-1,1) * x.lp, ylim = yrange.lim + c(-1,1) * y.lp)
+	plot.window(xlim = xrange + c(-1,1) * x.lp, ylim = yrange + c(-1,1) * y.lp)
 	par(usr = c(xl, xr, yb, yt))		
 
 	# background rectangle for plotting area
