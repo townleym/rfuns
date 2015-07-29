@@ -573,8 +573,12 @@ greygrid2 = function(x = NA, y = NA, xaxt = T, yaxt = T, xrange = c(0, 360), yra
 		x = x[!is.na(x)]
 		y = y[!is.na(y)]
 
-		xrange = c(min(x), max(x))
-		yrange = c(min(y), max(y))
+		xrange = range(x)
+		yrange = range(y)
+
+		# Restrict to finite values for plot axis limits
+		xrange.lim = range(x, finite = T)
+		yrange.lim = range(y, finite = T)
 	}
 	
 		
@@ -629,7 +633,7 @@ greygrid2 = function(x = NA, y = NA, xaxt = T, yaxt = T, xrange = c(0, 360), yra
 
 	# initialize & draw
 	plot.new()
-	plot.window(xlim = xrange + c(-1,1) * x.lp, ylim = yrange + c(-1,1) * y.lp)
+	plot.window(xlim = xrange.lim + c(-1,1) * x.lp, ylim = yrange.lim + c(-1,1) * y.lp)
 	par(usr = c(xl, xr, yb, yt))		
 
 	# background rectangle for plotting area
@@ -886,4 +890,19 @@ plot.avp = function(m) {
 	title(xlab = "Actual", ylab = "Fitted")
 	# abline(lm(y~x), col = analytics[1])
 	abline(a = 0, b = 1, lty = 2, col = "grey60")
+}
+
+
+### Now this is getting out of hand
+### A function for calculating a running total/mean/whatever
+
+runner = function(vec, w, FUN) {
+	fun = match.fun(FUN)
+	end = length(vec)
+	
+	outvec = NULL	
+	for (i in w:end) {
+		outvec[(i-n+1)] = do.call(FUN, args = list(vec[(i-n+1):i]))
+	}
+	return(outvec)
 }
